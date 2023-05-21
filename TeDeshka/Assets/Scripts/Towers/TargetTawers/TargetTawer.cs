@@ -4,43 +4,34 @@ using UnityEngine;
 
 public class TargetTawer : BaseTower
 {
-    SphereCollider DetectionColl;
-    Collider[] hitColliders;
-    public LayerMask EnemyLayer;
-
     public GameObject Tower;
-    public BaseMob target;
-    private void Start()
+    BaseMob target;
+
+    public override void Shoot()
     {
-        StartCoroutine(CDShoot());
-        DetectionColl = transform.root.GetChild(0).GetComponent<SphereCollider>();
-    }
-    public void Shoot()
-    {
-        //знаходження мобів в радіусі"DetectionColl.radius"
-        hitColliders = Physics.OverlapSphere(transform.position, DetectionColl.radius, EnemyLayer);
+        base.Shoot();
 
         if (hitColliders.Length <= 0)
             return;
         //система атакування моба який зайшов перший (працює не правильно)
-        if(target == null)
-            target = hitColliders[hitColliders.Length - 1].GetComponent<BaseMob>();
 
-        target.TakeDamage(Damage);
+
+        if(target == null)
+            target = hitColliders[0].GetComponent<BaseMob>();
+
+        if (Vector3.Distance(target.transform.position, transform.position) > DetectionColl.radius)
+        {
+            target = null;
+            Shoot();
+            return;
+        }
+        target.TakeDamage(Damage, state);
 
     }
     private void Update()
     {
-        if (target != null)
-            Tower.transform.LookAt(hitColliders[hitColliders.Length - 1].transform);
+        if (target != null && Vector3.Distance(target.transform.position, transform.position) < DetectionColl.radius)
+            Tower.transform.LookAt(target.gameObject.transform);
+    }
 
-    }
-    IEnumerator CDShoot()
-    {
-        while (true)
-        {
-            yield return new WaitForSeconds(CDAttack);
-            Shoot();
-        }
-    }
 }

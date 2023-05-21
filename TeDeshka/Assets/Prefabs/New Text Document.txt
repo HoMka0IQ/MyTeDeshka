@@ -1,0 +1,10 @@
+        GameObject textObj = new GameObject("3D Text");
+        HPText = textObj.AddComponent<TextMeshPro>();
+        textObj.transform.SetParent(transform);
+        textObj.transform.localPosition = new Vector3(0, 1.5f, 0);
+        textObj.transform.localScale = new Vector3(0.25f, 0.25f, 0.25f);
+        HPText.fontSize = 41;
+        HPText.fontStyle = FontStyles.Bold;
+        HPText.alignment = TextAlignmentOptions.Center;
+
+        HPText.gameObject.AddComponent(LookAtCam);

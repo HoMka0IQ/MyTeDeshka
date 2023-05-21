@@ -4,20 +4,11 @@ using UnityEngine;
 
 public class SplashTawer : BaseTower
 {
-    SphereCollider DetectionColl;
-    public Collider[] hitColliders;
-    public LayerMask EnemyLayer;
 
     public GameObject Tower;
-    private void Start()
+    public override void Shoot()
     {
-        StartCoroutine(CDShoot());
-        DetectionColl = transform.root.GetChild(0).GetComponent<SphereCollider>();
-    }
-    public void Shoot()
-    {
-        //знаходження мобів в радіусі"DetectionColl.radius"
-        hitColliders = Physics.OverlapSphere(transform.position, DetectionColl.radius, EnemyLayer);
+        base.Shoot();
 
         if (hitColliders.Length <= 0)
             return;
@@ -28,12 +19,5 @@ public class SplashTawer : BaseTower
     }
 
 
-    IEnumerator CDShoot()
-    {
-        while (true)
-        {
-            yield return new WaitForSeconds(CDAttack);
-            Shoot();
-        }
-    }
+
 }

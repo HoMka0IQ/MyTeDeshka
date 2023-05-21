@@ -5,39 +5,73 @@ using TMPro;
 
 public class BaseMob : MonoBehaviour
 {
-    public float movementSpeed;
+    float movementSpeed;
+    public float MaxMovementSpeed;
     public int damage;
     [Range(0,99)]
     public float armor;
     public float HP;
-    TMP_Text HPText;
+    public TMP_Text HPText;
 
     
     Transform[] RoadPosition;
     int pointsLeft;
+
+    float InFire;
+    float PereodicTimaInFire;
+    public GameObject FireParticle;
+    float InFrost;
+    public GameObject FrostParticle;
     public BaseMob()
     {
-        movementSpeed = 10;
+        MaxMovementSpeed = 10;
         damage = 1;
         HP = 10;
     }
+    public BaseMob(int damage, float movementSpeed, float armor, float HP)
+    {
+        this.damage = damage;
+        this.movementSpeed = movementSpeed;
+        this.armor = armor;
+        this.HP = HP;
+    }
     void Start()
     {
-        GameObject textObj = new GameObject("3D Text");
-        HPText = textObj.AddComponent<TextMeshPro>();
-        textObj.transform.SetParent(transform);
-        textObj.transform.localPosition = new Vector3(0, 1.5f, 0);
-        textObj.transform.localScale = new Vector3(0.25f, 0.25f, 0.25f);
-        HPText.fontSize = 41;
-        HPText.fontStyle = FontStyles.Bold;
-        HPText.alignment = TextAlignmentOptions.Center;
-
         LoadHPText();
+
+        movementSpeed = MaxMovementSpeed;
     }
 
     void Update()
     {
         Movement();
+
+        if (InFire > 0)
+        {
+            FireParticle.SetActive(true);
+            InFire -= Time.deltaTime;
+            PereodicTimaInFire += Time.deltaTime;
+            if (PereodicTimaInFire >= 1)
+            {
+                TakeDamage(5,true);
+                PereodicTimaInFire = 0;
+            }
+
+            if (InFire <= 0)
+                FireParticle.SetActive(false);
+        }
+
+        if (InFrost > 0)
+        {
+            FrostParticle.SetActive(true);
+            InFrost -= Time.deltaTime;
+            movementSpeed = MaxMovementSpeed / 2;
+            if (InFrost <= 0)
+                movementSpeed = MaxMovementSpeed;
+
+            if (InFrost <= 0)
+                FrostParticle.SetActive(false);
+        }
     }
     void Movement()
     {
@@ -50,7 +84,7 @@ public class BaseMob : MonoBehaviour
         Vector3 direction = (LockYPos - transform.position).normalized;
         
         transform.Translate(direction * movementSpeed * Time.deltaTime, Space.World);
-
+        transform.LookAt(LockYPos);
         //зміна точки до якої йде моб, після того як він дойде до неї
         if (Vector3.Distance(transform.position, LockYPos) < 0.1f)
         {
@@ -65,6 +99,27 @@ public class BaseMob : MonoBehaviour
     public void TakeDamage(int dmg)
     {
         HP -= dmg - ((dmg * armor) / 100);
+        LoadHPText();
+
+        if (HP <= 0)
+            Destroy(gameObject);
+    }
+    public void TakeDamage(int dmg, MobState.State state)
+    {
+        TakeDamage(dmg);
+        switch (state)
+        {
+            case MobState.State.InFire:
+                InFire = 5f;
+                break;
+            case MobState.State.InFrost:
+                InFrost = 5f;
+                break;
+        }
+    }
+    public void TakeDamage(int dmg, bool TrueDamage)
+    {
+        HP -= dmg;
         LoadHPText();
 
         if (HP <= 0)
