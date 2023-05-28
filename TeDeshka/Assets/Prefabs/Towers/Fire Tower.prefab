@@ -43,7 +43,7 @@ GameObject:
   - component: {fileID: 6190812795533602385}
   - component: {fileID: 9024369450444068635}
   - component: {fileID: 5483337135500571535}
-  - component: {fileID: 3603053211916440069}
+  - component: {fileID: 4331823685773363224}
   m_Layer: 0
   m_Name: Tower_GO
   m_TagString: Untagged
@@ -116,7 +116,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &3603053211916440069
+--- !u!114 &4331823685773363224
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -125,14 +125,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 3124372316807970154}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8b6b2028a7efd654bb1b10fffa315e11, type: 3}
+  m_Script: {fileID: 11500000, guid: cbdcce74f07f65349bcc713124f759c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CDAttack: 2
-  Damage: 5
   EnemyLayer:
     serializedVersion: 2
     m_Bits: 64
+  CDAttack: 2
+  Damage: 5
+  state: 1
   Tower: {fileID: 310844645049167782}
 --- !u!1 &5207319059138717399
 GameObject:
@@ -157,7 +158,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5207319059138717399}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 174.87, y: 0, z: 88}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0

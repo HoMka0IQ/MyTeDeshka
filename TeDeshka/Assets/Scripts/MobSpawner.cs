@@ -26,6 +26,8 @@ public class MobSpawner : MonoBehaviour
 
     void OnDrawGizmos()
     {
+
+
         for (int i = 0; i < RoadPositions.Length; i++)
         {
             Gizmos.color = Color.blue;
@@ -37,8 +39,6 @@ public class MobSpawner : MonoBehaviour
         Gizmos.DrawSphere(transform.position, 0.5f);
         Gizmos.color = Color.blue;
         Gizmos.DrawLine(transform.position, RoadPositions[0].position);
-
-
     }
 
 }

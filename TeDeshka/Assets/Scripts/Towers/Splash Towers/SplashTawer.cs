@@ -5,7 +5,6 @@ using UnityEngine;
 public class SplashTawer : BaseTower
 {
 
-    public GameObject Tower;
     public override void Shoot()
     {
         base.Shoot();
@@ -15,7 +14,7 @@ public class SplashTawer : BaseTower
 
         //система атакування мобів які йдуть в радіусі бачення тавера
         for (int i = 0; i < hitColliders.Length; i++)
-            hitColliders[i].GetComponent<BaseMob>().TakeDamage(Damage);
+            hitColliders[i].GetComponent<BaseMob>().TakeDamage(Damage, state);
     }
 
 

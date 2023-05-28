@@ -5,8 +5,7 @@ using UnityEngine;
 public class BaseTower : MonoBehaviour
 {
     protected SphereCollider DetectionColl;
-    public Collider[] hitColliders;
-    public LayerMask EnemyLayer;
+    protected Collider[] hitColliders;
 
     public float CDAttack;
     
@@ -20,13 +19,14 @@ public class BaseTower : MonoBehaviour
     }
     private void Start()
     {
+
         StartCoroutine(CDShoot());
         DetectionColl = transform.root.GetChild(0).GetComponent<SphereCollider>();
     }
     public virtual void Shoot()
     {
         //знаходження мобів в радіусі"DetectionColl.radius"
-        hitColliders = Physics.OverlapSphere(transform.position, DetectionColl.radius, EnemyLayer);
+        hitColliders = Physics.OverlapSphere(transform.position, DetectionColl.radius, 64);
     }
     IEnumerator CDShoot()
     {
