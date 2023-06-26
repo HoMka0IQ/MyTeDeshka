@@ -7,14 +7,13 @@ public class SplashTawer : BaseTower
 
     public override void Shoot()
     {
-        base.Shoot();
-
-        if (hitColliders.Length <= 0)
-            return;
-
         //система атакування мобів які йдуть в радіусі бачення тавера
-        for (int i = 0; i < hitColliders.Length; i++)
-            hitColliders[i].GetComponent<BaseMob>().TakeDamage(Damage, state);
+        for (int i = 0; i < AllEnemyInRange.Count; i++)
+        {
+            if (AllEnemyInRange[i] != null)
+                AllEnemyInRange[i].GetComponent<BaseMob>().TakeDamage(Damage, state);
+        }
+            
     }
 
 

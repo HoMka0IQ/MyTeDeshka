@@ -2,12 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BaseTower : MonoBehaviour
+public abstract class BaseTower : MonoBehaviour
 {
     protected SphereCollider DetectionColl;
-    protected Collider[] hitColliders;
+
+
+    public List<GameObject> AllEnemyInRange;
 
     public float CDAttack;
+    float _CDAttack = 0;
     
     public int Damage;
 
@@ -19,22 +22,45 @@ public class BaseTower : MonoBehaviour
     }
     private void Start()
     {
-
-        StartCoroutine(CDShoot());
         DetectionColl = transform.root.GetChild(0).GetComponent<SphereCollider>();
     }
-    public virtual void Shoot()
+
+    private void Update()
     {
-        //знаходження мобів в радіусі"DetectionColl.radius"
-        hitColliders = Physics.OverlapSphere(transform.position, DetectionColl.radius, 64);
-    }
-    IEnumerator CDShoot()
-    {
-        while (true)
+        if (_CDAttack <= 0)
         {
-            yield return new WaitForSeconds(CDAttack);
-            Shoot();
+            if (AllEnemyInRange.Count > 0)
+            {
+                for (int i = 0; i < AllEnemyInRange.Count; i++)
+                {
+                    if (AllEnemyInRange[i] == null)
+                        AllEnemyInRange.Remove(AllEnemyInRange[i]);
+                }
+                Shoot();
+                _CDAttack = CDAttack;
+            }
+        }
+        else
+        {
+            _CDAttack -= Time.deltaTime;
         }
     }
+    public abstract void Shoot();
 
+
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+        {
+            AllEnemyInRange.Add(other.gameObject);
+        }
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+        {
+            AllEnemyInRange.Remove(other.gameObject);
+        }
+    }
 }
